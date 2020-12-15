@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:food_available/src/bloc/provider.dart';
 import 'package:food_available/src/pages/acerca_page.dart';
+import 'package:food_available/src/pages/calificaciones_page.dart';
 import 'package:food_available/src/pages/evidencia_page.dart';
 import 'package:food_available/src/pages/historial_page.dart';
 import 'package:food_available/src/pages/mapa_page.dart';
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
           'opciones': (BuildContext context) => OpcionesPage(),
           'donador': (BuildContext context) => DonadorPage(),
           'producto_donador': (BuildContext context) => ProductoDonadorPage(),
+          'calificaciones': (BuildContext context) => CalificacionesPage(),
           'repartidor': (BuildContext context) => RepartidorPage(),
           'producto_repartidor': (BuildContext context) =>
               ProductoRepartidorPage(),

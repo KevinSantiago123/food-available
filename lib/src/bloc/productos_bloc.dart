@@ -2,12 +2,14 @@ import 'dart:io';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:food_available/src/models/producto_model.dart';
+import 'package:food_available/src/models/producto_entregado_model.dart';
 import 'package:food_available/src/providers/productos_provider.dart';
 
 class ProductosBloc {
   final _productosController = new BehaviorSubject<List<ProductoModel>>();
   final _cargandoController = new BehaviorSubject<bool>();
-  final _productoEntregadoController = new BehaviorSubject<ProductoModel>();
+  final _productoEntregadoController =
+      new BehaviorSubject<ProductoEntregadoModel>();
 
   final _productosProvider = new ProductosProvider();
 
@@ -15,7 +17,7 @@ class ProductosBloc {
       _productosController.stream;
   Stream<bool> get cargando => _cargandoController.stream;
 
-  Stream<ProductoModel> get productoEntregado =>
+  Stream<ProductoEntregadoModel> get productoEntregadoStream =>
       _productoEntregadoController.stream;
 
   void cargarProductos() async {
@@ -29,13 +31,21 @@ class ProductosBloc {
   }
 
   void cargarEvidenciaProducto([int value = 1]) async {
+    _cargandoController.sink.add(true);
     final producto = await _productosProvider.listarEvidenciaRecolector(value);
     _productoEntregadoController.sink.add(producto);
+    _cargandoController.sink.add(false);
   }
 
   void agregarProducto(ProductoModel producto) async {
     _cargandoController.sink.add(true);
     await _productosProvider.crearProducto(producto);
+    _cargandoController.sink.add(false);
+  }
+
+  void agregarProductoEntregado(ProductoEntregadoModel producto) async {
+    _cargandoController.sink.add(true);
+    await _productosProvider.crearProductoEntregado(producto);
     _cargandoController.sink.add(false);
   }
 

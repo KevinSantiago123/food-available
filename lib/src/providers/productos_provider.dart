@@ -8,6 +8,7 @@ import 'package:food_available/src/preferencias_usuario/preferencias_usuario.dar
 import 'package:food_available/src/models/producto_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 export 'package:food_available/src/models/producto_model.dart';
+import 'package:food_available/src/models/producto_entregado_model.dart';
 
 class ProductosProvider {
   SharedPreferences _prefs;
@@ -31,12 +32,20 @@ class ProductosProvider {
 
   //final String _url = 'https://food-available-dev.firebaseio.com';
   final productosModel = new ProductoModel();
+  final productosEntregadoModel = new ProductoEntregadoModel();
 
   Future<bool> crearProducto(ProductoModel producto) async {
     final url = '$_url/productos.json?auth=${_pref.token}';
     final resp = await http.post(url, body: productoModelToJson(producto));
     //final decodedData = json.decode(resp.body);
     //print(decodedData);
+    return true;
+  }
+
+  Future<bool> crearProductoEntregado(ProductoEntregadoModel producto) async {
+    final url = '$_url/productos_entregados.json?auth=${_pref.token}';
+    final resp =
+        await http.post(url, body: productoEntregadoModelToJson(producto));
     return true;
   }
 
@@ -68,17 +77,19 @@ class ProductosProvider {
     return productos;
   }
 
-  Future<ProductoModel> listarEvidenciaRecolector([int value = 1]) async {
+  Future<ProductoEntregadoModel> listarEvidenciaRecolector(
+      [int value = 1]) async {
     final url =
         '$_url/productos.json?orderBy="estado"&equalTo=$value&print=pretty&auth=${_pref.token}';
     //print(url);
     final resp = await http.get(url);
-    final List<ProductoModel> productos =
-        productosModel.modelarProductos(json.decode(resp.body));
-    ProductoModel productosNew = new ProductoModel();
-    productos.forEach((data) {
+    final List<ProductoEntregadoModel> productosEntregados =
+        productosEntregadoModel
+            .modelarProductosEntregado(json.decode(resp.body));
+    ProductoEntregadoModel productosNew = new ProductoEntregadoModel();
+    productosEntregados.forEach((data) {
       if (data.idCorreoRepartidor == _pref.correo) {
-        productosNew = productosModel.toProductoModel(data);
+        productosNew = productosNew.toProductoModel(data);
       }
     });
     return productosNew;

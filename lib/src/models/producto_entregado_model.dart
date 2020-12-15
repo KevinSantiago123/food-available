@@ -49,7 +49,7 @@ class ProductoEntregadoModel {
     this.cx = 0.0,
     this.cy = 0.0,
     this.fotoUrl,
-    this.estado,
+    this.estado = 0,
     this.fechaEntrega,
     this.direccionEntrega,
     this.barrioEntrega,
@@ -86,12 +86,11 @@ class ProductoEntregadoModel {
         departamentoEntrega: json["departamento_entrega"],
         detalleEntrega: json["detalle_entrega"],
         fotoUrlEntrega: json["foto_url_entrega"],
-        cxEntrega: json["cx_entrega"].toDouble(),
-        cyEntrega: json["cy_entrega"].toDouble(),
+        cxEntrega: 0.0,
+        cyEntrega: 0.0,
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "id_correo": idCorreo,
         "id_correo_repartidor": idCorreoRepartidor,
         "nombre": nombre,
@@ -146,9 +145,40 @@ class ProductoEntregadoModel {
         cyEntrega: 0.0,
       );
 
+  ProductoEntregadoModel toProductoModel(ProductoEntregadoModel producto) =>
+      ProductoEntregadoModel(
+        id: producto.id,
+        idCorreo: producto.idCorreo,
+        idCorreoRepartidor: producto.idCorreoRepartidor,
+        nombre: producto.nombre,
+        cantidadUnidades: producto.cantidadUnidades,
+        fechaCaducidad: producto.fechaCaducidad,
+        direccion: producto.direccion,
+        telefono: producto.telefono,
+        barrio: producto.barrio,
+        ciudad: producto.ciudad,
+        departamento: producto.departamento,
+        observacion: producto.observacion,
+        cx: producto.cx,
+        cy: producto.cy,
+        fotoUrl: producto.fotoUrl,
+        estado: producto.estado,
+        fechaEntrega: '',
+        direccionEntrega: '',
+        barrioEntrega: '',
+        ciudadEntrega: '',
+        departamentoEntrega: '',
+        detalleEntrega: '',
+        fotoUrlEntrega: '',
+        cxEntrega: 0.0,
+        cyEntrega: 0.0,
+      );
+
   List<ProductoEntregadoModel> modelarProductosEntregado(data) {
     final List<ProductoEntregadoModel> productosEntregado = new List();
+    print('pase');
     if (data == null) {
+      print('pase null');
       data.forEach((id, prod) {
         final _temp = ProductoEntregadoModel.fromNull();
         productosEntregado.add(_temp);
@@ -157,13 +187,14 @@ class ProductoEntregadoModel {
     }
 
     if (data['error'] != null) {
+      print('pase error');
       data.forEach((id, prod) {
         final _temp = ProductoEntregadoModel.fromNull();
         productosEntregado.add(_temp);
       });
       return productosEntregado;
     }
-
+    print('pase2');
     data.forEach((id, prod) {
       final prodTemp = ProductoEntregadoModel.fromJson(prod);
       prodTemp.id = id;

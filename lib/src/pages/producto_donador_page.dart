@@ -39,6 +39,10 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
         title: Text('Producto'),
         actions: <Widget>[
           IconButton(
+            icon: Icon(Icons.face),
+            onPressed: () => Navigator.pushNamed(context, 'calificaciones'),
+          ),
+          IconButton(
             icon: Icon(Icons.photo_size_select_actual),
             onPressed: _seleccionarFoto,
             //onPressed: () {},
@@ -165,8 +169,8 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
       //cursorColor: Colors.red,
       decoration: InputDecoration(
         //border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
-        hintText: 'Fecha de nacimiento',
-        labelText: 'Fecha de nacimiento',
+        hintText: 'Fecha de caducidad',
+        labelText: 'Fecha de caducidad',
         suffixIcon:
             Icon(Icons.perm_contact_calendar, color: Colors.deepPurple[700]),
         icon: Icon(Icons.calendar_today, color: Colors.deepPurple[700]),
@@ -260,7 +264,6 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
     );
   }
 
-
   Widget _crearObservacion() {
     return TextFormField(
       initialValue: producto.observacion,
@@ -306,7 +309,7 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
       _guardando = false;
     });
     mostrarSnackbar('Registro guardado');
-    Navigator.pushReplacementNamed(context, 'donador');
+    Navigator.pushReplacementNamed(context, 'opciones');
   }
 
   void mostrarSnackbar(String mensaje) {

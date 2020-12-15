@@ -28,6 +28,10 @@ class _MapaPageState extends State<MapaPage> {
         }),
         actions: <Widget>[
           IconButton(
+            icon: Icon(Icons.face),
+            onPressed: () => Navigator.pushNamed(context, 'calificaciones'),
+          ),
+          IconButton(
             icon: Icon(Icons.my_location),
             onPressed: () => map.move(LatLng(4.758558, -74.032203), zoom),
           )

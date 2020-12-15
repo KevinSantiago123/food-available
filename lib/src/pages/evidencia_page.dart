@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:food_available/src/models/producto_entregado_model.dart';
 import 'package:food_available/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:food_available/src/bloc/provider.dart';
-import 'package:food_available/src/models/producto_model.dart';
 
 class EvidenciaPage extends StatefulWidget {
   @override
@@ -22,12 +21,20 @@ class _EvidenciaPageState extends State<EvidenciaPage> {
   String _fecha = '';
   TextEditingController _inputFieldDateController = new TextEditingController();
   File foto;
+  int contador = 0;
 
   @override
   Widget build(BuildContext context) {
-    productosBloc = Provider.productosBloc(context);
-    productosBloc.cargarEvidenciaProducto(3);
-    pref = new PreferenciasUsuario();
+    if (contador == 0) {
+      productosBloc = Provider.productosBloc(context);
+      productosBloc.cargarEvidenciaProducto(3);
+      pref = new PreferenciasUsuario();
+      Stream<ProductoEntregadoModel> data =
+          productosBloc.productoEntregadoStream;
+      data.listen((data) => productoEntregado = data);
+      contador++;
+    }
+
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -71,31 +78,22 @@ class _EvidenciaPageState extends State<EvidenciaPage> {
   }
 
   Widget _crearDireccion() {
-    return StreamBuilder(
-        stream: productosBloc.productoEntregado,
-        builder: (BuildContext context, AsyncSnapshot<ProductoModel> snapshot) {
-          if (snapshot.hasData) {
-            return TextFormField(
-              //initialValue: snapshot.data.direccion,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                labelText: 'Dirección',
-                icon: Icon(Icons.add_location, color: Colors.deepPurple[700]),
-              ),
-              onSaved: (value) =>
-                  productoEntregado.direccion = value.toUpperCase(),
-              validator: (value) {
-                if (value.length < 3) {
-                  return 'Ingrese la dirección de la entrega';
-                } else {
-                  return null;
-                }
-              },
-            );
-          } else {
-            return Container();
-          }
-        });
+    return TextFormField(
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(
+        labelText: 'Dirección',
+        icon: Icon(Icons.add_location, color: Colors.deepPurple[700]),
+      ),
+      onSaved: (value) =>
+          productoEntregado.direccionEntrega = value.toUpperCase(),
+      validator: (value) {
+        if (value.length < 3) {
+          return 'Ingrese la dirección de la entrega';
+        } else {
+          return null;
+        }
+      },
+    );
   }
 
   Widget _crearFecha(BuildContext context) {
@@ -143,88 +141,59 @@ class _EvidenciaPageState extends State<EvidenciaPage> {
   }
 
   Widget _crearBarrio() {
-    return StreamBuilder(
-        stream: productosBloc.productoEntregado,
-        builder: (BuildContext context, AsyncSnapshot<ProductoModel> snapshot) {
-          if (snapshot.hasData) {
-            return TextFormField(
-              //initialValue: snapshot.data.barrio,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                labelText: 'Barrio',
-                icon:
-                    Icon(Icons.confirmation_num, color: Colors.deepPurple[700]),
-              ),
-              onSaved: (value) =>
-                  productoEntregado.barrio = value.toUpperCase(),
-              validator: (value) {
-                if (value.length < 3) {
-                  return 'Ingrese el barrio';
-                } else {
-                  return null;
-                }
-              },
-            );
-          } else {
-            return Container();
-          }
-        });
+    return TextFormField(
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(
+        labelText: 'Barrio',
+        icon: Icon(Icons.confirmation_num, color: Colors.deepPurple[700]),
+      ),
+      onSaved: (value) => productoEntregado.barrioEntrega = value.toUpperCase(),
+      validator: (value) {
+        if (value.length < 3) {
+          return 'Ingrese el barrio';
+        } else {
+          return null;
+        }
+      },
+    );
   }
 
   Widget _crearCiudad() {
-    return StreamBuilder(
-        stream: productosBloc.productoEntregado,
-        builder: (BuildContext context, AsyncSnapshot<ProductoModel> snapshot) {
-          if (snapshot.hasData) {
-            return TextFormField(
-              //initialValue: snapshot.data.ciudad,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                labelText: 'Ciudad',
-                icon: Icon(Icons.location_city, color: Colors.deepPurple[700]),
-              ),
-              onSaved: (value) =>
-                  productoEntregado.ciudad = value.toUpperCase(),
-              validator: (value) {
-                if (value.length < 3) {
-                  return 'Ingrese el barrio';
-                } else {
-                  return null;
-                }
-              },
-            );
-          } else {
-            return Container();
-          }
-        });
+    return TextFormField(
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(
+        labelText: 'Ciudad',
+        icon: Icon(Icons.location_city, color: Colors.deepPurple[700]),
+      ),
+      onSaved: (value) => productoEntregado.ciudadEntrega = value.toUpperCase(),
+      validator: (value) {
+        if (value.length < 3) {
+          return 'Ingrese el barrio';
+        } else {
+          return null;
+        }
+      },
+    );
   }
 
   Widget _crearDepartamento() {
-    return StreamBuilder(
-        stream: productosBloc.productoEntregado,
-        builder: (BuildContext context, AsyncSnapshot<ProductoModel> snapshot) {
-          if (snapshot.hasData) {
-            return TextFormField(
-              //initialValue: snapshot.data.departamento,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                labelText: 'Departamento',
-                icon: Icon(Icons.add_location, color: Colors.deepPurple[700]),
-              ),
-              onSaved: (value) =>
-                  productoEntregado.departamento = value.toUpperCase(),
-              validator: (value) {
-                if (value.length < 3) {
-                  return 'Ingrese el departamento';
-                } else {
-                  return null;
-                }
-              },
-            );
-          } else {
-            return Container();
-          }
-        });
+    return TextFormField(
+      //initialValue: snapshot.data.departamento,
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(
+        labelText: 'Departamento',
+        icon: Icon(Icons.add_location, color: Colors.deepPurple[700]),
+      ),
+      onSaved: (value) =>
+          productoEntregado.departamentoEntrega = value.toUpperCase(),
+      validator: (value) {
+        if (value.length < 3) {
+          return 'Ingrese el departamento';
+        } else {
+          return null;
+        }
+      },
+    );
   }
 
   Widget _crearObservacion() {
@@ -234,7 +203,7 @@ class _EvidenciaPageState extends State<EvidenciaPage> {
         labelText: 'Observación',
         icon: Icon(Icons.text_snippet, color: Colors.deepPurple[700]),
       ),
-      onSaved: (value) => productoEntregado.observacion = value,
+      onSaved: (value) => productoEntregado.detalleEntrega = value,
     );
   }
 
@@ -255,21 +224,18 @@ class _EvidenciaPageState extends State<EvidenciaPage> {
     setState(() {
       _guardando = true;
     });
+
     productoEntregado.estado = 4;
 
     if (foto != null) {
-      productoEntregado.fotoUrl = await productosBloc.subirFoto(foto);
+      productoEntregado.fotoUrlEntrega = await productosBloc.subirFoto(foto);
     }
-    /*
-    if (producto.id == null) {
-      productosBloc.agregarProducto(producto);
-    } else {
-      productosBloc.editarProducto(producto);
-    }*/
+    productosBloc.agregarProductoEntregado(productoEntregado);
+    productosBloc.borrarProducto(productoEntregado.id);
     setState(() {
       _guardando = false;
     });
-    mostrarSnackbar('Registro cargado Exitosamente');
+    mostrarSnackbar('Se cargo la evidencia exitosamente Exitosamente');
     Navigator.pushReplacementNamed(context, 'opciones');
   }
 
@@ -282,10 +248,10 @@ class _EvidenciaPageState extends State<EvidenciaPage> {
   }
 
   Widget _mostrarFoto() {
-    if (productoEntregado.fotoUrl != null) {
+    if (productoEntregado.fotoUrlEntrega != null) {
       return FadeInImage(
         placeholder: AssetImage('assets/jar-loading.gif'),
-        image: NetworkImage(productoEntregado.fotoUrl),
+        image: NetworkImage(productoEntregado.fotoUrlEntrega),
         height: 300.0,
         fit: BoxFit.contain,
       );
@@ -316,7 +282,7 @@ class _EvidenciaPageState extends State<EvidenciaPage> {
     );
     foto = File(pickedFile.path);
     if (foto != null) {
-      productoEntregado.fotoUrl = null;
+      productoEntregado.fotoUrlEntrega = null;
     }
     setState(() {});
   }
