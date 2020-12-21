@@ -176,9 +176,9 @@ class ProductoEntregadoModel {
 
   List<ProductoEntregadoModel> modelarProductosEntregado(data) {
     final List<ProductoEntregadoModel> productosEntregado = new List();
-    print('pase');
+    //print('pase');
     if (data == null) {
-      print('pase null');
+      //print('pase null');
       data.forEach((id, prod) {
         final _temp = ProductoEntregadoModel.fromNull();
         productosEntregado.add(_temp);
@@ -187,14 +187,14 @@ class ProductoEntregadoModel {
     }
 
     if (data['error'] != null) {
-      print('pase error');
+      //print('pase error');
       data.forEach((id, prod) {
         final _temp = ProductoEntregadoModel.fromNull();
         productosEntregado.add(_temp);
       });
       return productosEntregado;
     }
-    print('pase2');
+    //print('pase2');
     data.forEach((id, prod) {
       final prodTemp = ProductoEntregadoModel.fromJson(prod);
       prodTemp.id = id;

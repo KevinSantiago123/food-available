@@ -1,6 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter/material.dart';
+
+import 'package:food_available/src/bloc/login_bloc.dart';
+import 'package:food_available/src/bloc/mensajes_bloc.dart';
+import 'package:food_available/src/bloc/provider.dart';
+import 'package:food_available/src/models/usuario_model.dart';
 
 class MapaPage extends StatefulWidget {
   @override
@@ -8,12 +13,22 @@ class MapaPage extends StatefulWidget {
 }
 
 class _MapaPageState extends State<MapaPage> {
+  MensajesBloc mensajesBloc;
+  LoginBloc loginBloc;
+  UsuarioModel usuario;
+  Map dataMap;
   final MapController map = new MapController();
   final double zoom = 16;
   String tipoMapa = 'streets-v11';
 
   @override
   Widget build(BuildContext context) {
+    loginBloc = Provider.of(context);
+    mensajesBloc = Provider.mensajesBloc(context);
+    dataMap = ModalRoute.of(context).settings.arguments;
+    loginBloc.listarUsuario();
+    Stream<UsuarioModel> dataUsuario = loginBloc.usuarioStream;
+    dataUsuario.listen((data) => usuario = data);
     return Scaffold(
       appBar: AppBar(
         title: Text('Ubica la donación'),
@@ -102,8 +117,12 @@ class _MapaPageState extends State<MapaPage> {
         Icons.mail,
         size: 35,
       ),
-      onPressed: () {},
+      onPressed: () => _notificar(),
     );
+  }
+
+  void _notificar() {
+    mensajesBloc.voyPorProducto(usuario, dataMap);
   }
 
   Widget _crearBotonFlotante(BuildContext context) {

@@ -37,6 +37,8 @@ class _CalificacionesPageState extends State<CalificacionesPage> {
             SizedBox(height: 40),
             _titulo('Observaciones'),
             _cajaObservacion(),
+            SizedBox(height: 20.0),
+            _crearBoton(),
           ],
         ),
       ),
@@ -125,6 +127,17 @@ class _CalificacionesPageState extends State<CalificacionesPage> {
         //onSaved: (value) => producto.observacion = value,
         //onSaved: (value) => {},
       ),
+    );
+  }
+
+  Widget _crearBoton() {
+    return RaisedButton.icon(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      color: Colors.deepPurple[600],
+      textColor: Colors.white,
+      label: Text('Calificar'),
+      icon: Icon(Icons.save),
+      onPressed: () => Navigator.pushReplacementNamed(context, 'opciones'),
     );
   }
 }

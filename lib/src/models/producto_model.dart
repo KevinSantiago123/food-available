@@ -8,7 +8,7 @@ String productoModelToJson(ProductoModel data) => json.encode(data.toJson());
 class ProductoModel {
   String id;
   String idCorreo;
-  String idCorreoRepartidor;
+  List<String> idCorreoRepartidor;
   String nombre;
   double cantidadUnidades;
   String fechaCaducidad;
@@ -22,11 +22,13 @@ class ProductoModel {
   double cy;
   String fotoUrl;
   int estado;
+  String tokenCel;
+  String idCorreoRepartidorAsignado;
 
   ProductoModel({
     this.id,
     this.idCorreo,
-    this.idCorreoRepartidor,
+    this.idCorreoRepartidor = const ['correo'],
     this.nombre,
     this.cantidadUnidades = 0.0,
     this.fechaCaducidad,
@@ -40,11 +42,13 @@ class ProductoModel {
     this.cy = 0.0,
     this.fotoUrl,
     this.estado,
+    this.tokenCel,
+    this.idCorreoRepartidorAsignado,
   });
 
   factory ProductoModel.fromJson(Map<String, dynamic> json) => ProductoModel(
         idCorreo: json["id_correo"],
-        idCorreoRepartidor: json["id_correo_repartidor"],
+        idCorreoRepartidor: json["id_correo_repartidor"].cast<String>(),
         nombre: json["nombre"],
         cantidadUnidades: json["cantidad_unidades"].toDouble(),
         fechaCaducidad:
@@ -59,10 +63,11 @@ class ProductoModel {
         cy: json["cy"].toDouble(),
         fotoUrl: json["foto_url"],
         estado: json["estado"],
+        tokenCel: json["token_cel"],
+        idCorreoRepartidorAsignado: json["id_correo_repartidor_asignado"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "id_correo": idCorreo,
         "id_correo_repartidor": idCorreoRepartidor,
         "nombre": nombre,
@@ -79,29 +84,11 @@ class ProductoModel {
         "cy": cy,
         "foto_url": fotoUrl,
         "estado": estado,
+        "token_cel": tokenCel,
+        "id_correo_repartidor_asignado": idCorreoRepartidorAsignado,
       };
 
-  factory ProductoModel.fromNull() => ProductoModel(
-        id: '1',
-        idCorreo: '',
-        idCorreoRepartidor: '',
-        nombre: '',
-        cantidadUnidades: 0.0,
-        fechaCaducidad: '',
-        direccion: '',
-        telefono: 0,
-        barrio: '',
-        ciudad: '',
-        departamento: '',
-        observacion: '',
-        cx: 0.0,
-        cy: 0.0,
-        fotoUrl: '',
-        estado: 0,
-      );
-
   ProductoModel toProductoModel(ProductoModel producto) => ProductoModel(
-        id: producto.id,
         idCorreo: producto.idCorreo,
         idCorreoRepartidor: producto.idCorreoRepartidor,
         nombre: producto.nombre,
@@ -117,31 +104,25 @@ class ProductoModel {
         cy: producto.cy,
         fotoUrl: producto.fotoUrl,
         estado: producto.estado,
+        tokenCel: producto.tokenCel,
+        idCorreoRepartidorAsignado: idCorreoRepartidorAsignado,
       );
 
   List<ProductoModel> modelarProductos(data) {
     final List<ProductoModel> productos = new List();
-    if (data == null) {
-      data.forEach((id, prod) {
-        final _temp = ProductoModel.fromNull();
-        productos.add(_temp);
-      });
-      return productos;
-    }
-
-    if (data['error'] != null) {
-      data.forEach((id, prod) {
-        final _temp = ProductoModel.fromNull();
-        productos.add(_temp);
-      });
-      return productos;
-    }
-
     data.forEach((id, prod) {
       final prodTemp = ProductoModel.fromJson(prod);
       prodTemp.id = id;
       productos.add(prodTemp);
     });
     return productos;
+  }
+
+  ProductoModel modelarProducto(data) {
+    ProductoModel usuTemp;
+    data.forEach((id, prod) {
+      usuTemp = ProductoModel.fromJson(prod);
+    });
+    return usuTemp;
   }
 }

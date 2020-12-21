@@ -8,7 +8,8 @@ class UsuarioProvider {
   final String _url = 'https://task-ulibre.firebaseio.com';
   final String _firebaseToken = 'AIzaSyBwBXIdT92VWQ7LcXyBh9IPM4LdLiVahxY';
   final _pref = new PreferenciasUsuario();
-  final productosModel = new UsuarioModel();
+  final _usuario = new UsuarioModel();
+  final _interesado = new InteresadoModel();
   String _mensaje = '';
 
   Future<Map<String, dynamic>> login(String email, String password) async {
@@ -75,5 +76,38 @@ class UsuarioProvider {
     final decodedData = json.decode(resp.body);
     //print(decodedData);
     return true;
+  }
+
+  Future<bool> crearUsuarioInteresado(String idProducto, String correo,
+      String nombres, int calificacion, String tokenCel) async {
+    InteresadoModel interesado = _interesado.toInteresadoModel(
+        idProducto, correo, nombres, calificacion, tokenCel);
+    final url = '$_url/interesados.json?auth=${_pref.token}';
+    final resp = await http.post(url, body: interesadoModelToJson(interesado));
+    final decodedData = json.decode(resp.body);
+    //print(decodedData);
+    return true;
+  }
+
+  Future<UsuarioModel> buscarInfoUsuario() async {
+    final url =
+        '$_url/usuarios.json?orderBy="correo"&equalTo="${_pref.correo}"&print=pretty&auth=${_pref.token}';
+    //print(url);
+    final resp = await http.get(url);
+    final UsuarioModel usuario =
+        _usuario.modelarUsuario(json.decode(resp.body));
+    //print(usuario.toJson());
+    return usuario;
+  }
+
+  Future<List<InteresadoModel>> listarInteresados(String idProducto) async {
+    final url =
+        '$_url/interesados.json?orderBy="id_producto"&equalTo="$idProducto"&print=pretty&auth=${_pref.token}';
+    //print(url);
+    final resp = await http.get(url);
+    //print(resp.body);
+    final List<InteresadoModel> interesados =
+        _interesado.modelarInteresados(json.decode(resp.body));
+    return interesados;
   }
 }

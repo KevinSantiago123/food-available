@@ -16,6 +16,7 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   ProductosBloc productosBloc;
+  MensajesBloc mensajesBloc;
   PreferenciasUsuario pref;
   ProductoModel producto = new ProductoModel();
 
@@ -23,21 +24,34 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
   String _fecha = '';
   TextEditingController _inputFieldDateController = new TextEditingController();
   File foto;
+  String tokenCel;
 
   @override
   Widget build(BuildContext context) {
     productosBloc = Provider.productosBloc(context);
+    mensajesBloc = Provider.mensajesBloc(context);
     final ProductoModel prodData = ModalRoute.of(context).settings.arguments;
     pref = new PreferenciasUsuario();
     if (prodData != null) {
       producto = prodData;
       _inputFieldDateController.text = producto.fechaCaducidad;
+    } else {
+      mensajesBloc.generarTokenCel();
+      Stream<String> data = mensajesBloc.tokenCelStream;
+      data.listen((data) => tokenCel = data);
     }
+    Map<String, dynamic> dataMap = {'id_producto': producto.id};
+    //print('soy el token cel: ' + tokenCel.toString());
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
         title: Text('Producto'),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.assignment_outlined),
+            onPressed: () =>
+                Navigator.pushNamed(context, 'interesados', arguments: dataMap),
+          ),
           IconButton(
             icon: Icon(Icons.face),
             onPressed: () => Navigator.pushNamed(context, 'calificaciones'),
@@ -294,13 +308,17 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
       _guardando = true;
     });
     if (producto.estado == null) producto.estado = 1;
-    if (producto.idCorreo == null) producto.idCorreo = pref.correo;
+    if (producto.idCorreo == null) {
+      producto.idCorreo = pref.correo;
+      producto.idCorreoRepartidor = [pref.correo];
+    }
 
     if (foto != null) {
       producto.fotoUrl = await productosBloc.subirFoto(foto);
     }
 
     if (producto.id == null) {
+      producto.tokenCel = tokenCel;
       productosBloc.agregarProducto(producto);
     } else {
       productosBloc.editarProducto(producto);
@@ -308,16 +326,8 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
     setState(() {
       _guardando = false;
     });
-    mostrarSnackbar('Registro guardado');
+    utils.mostrarSnackbar('Registro guardado', scaffoldKey);
     Navigator.pushReplacementNamed(context, 'opciones');
-  }
-
-  void mostrarSnackbar(String mensaje) {
-    final snackbar = SnackBar(
-      content: Text(mensaje),
-      duration: Duration(milliseconds: 1000),
-    );
-    scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
   Widget _mostrarFoto() {

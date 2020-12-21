@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:food_available/src/models/usuario_model.dart';
 
 import 'package:food_available/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:food_available/src/bloc/provider.dart';
 import 'package:food_available/src/models/producto_model.dart';
-import 'package:food_available/src/utils/util.dart' as utils;
+import 'package:food_available/src/utils/util.dart';
 
 class ProductoRepartidorPage extends StatefulWidget {
   @override
@@ -16,21 +16,37 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   ProductosBloc productosBloc;
+  LoginBloc loginBloc;
   PreferenciasUsuario pref;
-  ProductoModel producto = new ProductoModel();
+  MensajesBloc mensajesBloc;
+  ProductoModel producto;
+  UsuarioModel usuario;
   TextEditingController _inputFieldDateController = new TextEditingController();
   File foto;
   bool _guardando = false;
+  String tokenInteresado;
 
   @override
   Widget build(BuildContext context) {
+    loginBloc = Provider.of(context);
     productosBloc = Provider.productosBloc(context);
+    mensajesBloc = Provider.mensajesBloc(context);
     final ProductoModel prodData = ModalRoute.of(context).settings.arguments;
+    //producto = new ProductoModel();
+    //usuario = new UsuarioModel();
     pref = new PreferenciasUsuario();
+    loginBloc.listarUsuario();
+    Stream<UsuarioModel> dataUsuario = loginBloc.usuarioStream;
+    dataUsuario.listen((data) => usuario = data);
+    mensajesBloc.generarTokenCel();
+    Stream<String> data = mensajesBloc.tokenCelStream;
+    data.listen((data) => tokenInteresado = data);
+    //obtenerDatos();
     if (prodData != null) {
       producto = prodData;
       _inputFieldDateController.text = producto.fechaCaducidad;
     }
+
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -47,6 +63,7 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
                 _mostrarNombre(),
                 _mostrarCantidad(),
                 _mostrarFecha(context),
+                _crearNombreDonador(),
                 _mostrarTelefono(),
                 _mostrarCiudad(),
                 _mostrarDepartamento(),
@@ -61,6 +78,12 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
       ),
     );
   }
+
+  /*void obtenerDatos() {
+    loginBloc.listarUsuario();
+    Stream<UsuarioModel> data = loginBloc.usuarioStream;
+    data.listen((data) => usuario = data);
+  }*/
 
   Widget _mostrarNombre() {
     return TextFormField(
@@ -84,15 +107,23 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
     );
   }
 
-  Widget _crearDireccion() {
-    return TextFormField(
-      readOnly: true,
-      initialValue: producto.direccion,
-      decoration: InputDecoration(
-        labelText: 'Dirección',
-        icon: Icon(Icons.add_location, color: Colors.deepPurple[700]),
-      ),
-    );
+  Widget _crearNombreDonador() {
+    return StreamBuilder(
+        stream: loginBloc.usuarioStream,
+        builder: (BuildContext context, AsyncSnapshot<UsuarioModel> snapshot) {
+          if (snapshot.hasData) {
+            return TextFormField(
+              readOnly: true,
+              initialValue: snapshot.data.nombres,
+              decoration: InputDecoration(
+                labelText: 'Nombres donador',
+                icon: Icon(Icons.person, color: Colors.deepPurple[700]),
+              ),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
   }
 
   Widget _mostrarFecha(BuildContext context) {
@@ -100,8 +131,8 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
       readOnly: true,
       controller: _inputFieldDateController,
       decoration: InputDecoration(
-        hintText: 'Fecha de nacimiento',
-        labelText: 'Fecha de nacimiento',
+        hintText: 'Fecha de caducidad',
+        labelText: 'Fecha de caducidad',
         suffixIcon:
             Icon(Icons.perm_contact_calendar, color: Colors.deepPurple[700]),
         icon: Icon(Icons.calendar_today, color: Colors.deepPurple[700]),
@@ -181,22 +212,17 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
     setState(() {
       _guardando = true;
     });
-    producto.estado = 3;
-    producto.idCorreoRepartidor = pref.correo;
+    print(producto.toJson());
+    mensajesBloc.apartarProducto(usuario, producto);
+    producto.idCorreoRepartidor.add(pref.correo);
+    loginBloc.agregarInteresado(producto.id, usuario.correo, usuario.nombres,
+        usuario.calificacion, tokenInteresado);
     productosBloc.editarProducto(producto);
     setState(() {
       _guardando = false;
     });
-    mostrarSnackbar('Se ha apartado la donación con exito');
-    Navigator.pushReplacementNamed(context, 'mapa');
-  }
-
-  void mostrarSnackbar(String mensaje) {
-    final snackbar = SnackBar(
-      content: Text(mensaje),
-      duration: Duration(milliseconds: 2000),
-    );
-    scaffoldKey.currentState.showSnackBar(snackbar);
+    mostrarSnackbar('Se ha apartado la donación con exito', scaffoldKey);
+    Navigator.pushReplacementNamed(context, 'opciones');
   }
 
   Widget _mostrarFoto() {

@@ -23,11 +23,9 @@ class DonadorPage extends StatelessWidget {
       stream: productosBloc.productosStream,
       builder:
           (BuildContext context, AsyncSnapshot<List<ProductoModel>> snapshot) {
-        /*if (snapshot.data == null) {
-          Navigator.pushReplacementNamed(context, 'login');
-        }*/
-
         if (snapshot.hasData) {
+          if (snapshot.data.length == 0) return Container();
+          //Navigator.pushReplacementNamed(context, 'login');
           return ListView.builder(
             padding: EdgeInsets.all(10.0),
             itemCount: snapshot.data.length,

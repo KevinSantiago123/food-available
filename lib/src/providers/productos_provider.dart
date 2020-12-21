@@ -57,6 +57,16 @@ class ProductosProvider {
     return true;
   }
 
+  Future<ProductoModel> buscarProducto(String idProducto) async {
+    final url = '$_url/productos/$idProducto.json?auth=${_pref.token}';
+    //print(url);
+    //final resp = producto.remove('id');
+    final resp = await http.get(url);
+    final ProductoModel producto = productoModelFromJson(resp.body);
+    //print('saliendo del ws' + producto.toJson().toString());
+    return producto;
+  }
+
   Future<List<ProductoModel>> listarProductos() async {
     final url =
         '$_url/productos.json?orderBy="id_correo"&equalTo="${_pref.correo}"&print=pretty&auth=${_pref.token}';
@@ -72,6 +82,7 @@ class ProductosProvider {
         '$_url/productos.json?orderBy="estado"&equalTo=$value&print=pretty&auth=${_pref.token}';
     //print(url);
     final resp = await http.get(url);
+    final temp = json.decode(resp.body);
     final List<ProductoModel> productos =
         productosModel.modelarProductos(json.decode(resp.body));
     return productos;

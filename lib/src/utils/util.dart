@@ -30,3 +30,20 @@ void mostrarSnackbar(String mensaje, dynamic key) {
   );
   key.currentState.showSnackBar(snackbar);
 }
+
+Widget ver(String mensaje) {
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 30.0),
+    child: Column(children: [
+      Icon(
+        Icons.error_outline,
+        color: Colors.red,
+        size: 60,
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 16),
+        child: Text(mensaje),
+      )
+    ]),
+  );
+}
