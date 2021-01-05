@@ -21,6 +21,7 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
   MensajesBloc mensajesBloc;
   ProductoModel producto;
   UsuarioModel usuario;
+  UsuarioModel usuarioDonador;
   TextEditingController _inputFieldDateController = new TextEditingController();
   File foto;
   bool _guardando = false;
@@ -31,9 +32,7 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
     loginBloc = Provider.of(context);
     productosBloc = Provider.productosBloc(context);
     mensajesBloc = Provider.mensajesBloc(context);
-    final ProductoModel prodData = ModalRoute.of(context).settings.arguments;
-    //producto = new ProductoModel();
-    //usuario = new UsuarioModel();
+    producto = ModalRoute.of(context).settings.arguments;
     pref = new PreferenciasUsuario();
     loginBloc.listarUsuario();
     Stream<UsuarioModel> dataUsuario = loginBloc.usuarioStream;
@@ -41,11 +40,8 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
     mensajesBloc.generarTokenCel();
     Stream<String> data = mensajesBloc.tokenCelStream;
     data.listen((data) => tokenInteresado = data);
-    //obtenerDatos();
-    if (prodData != null) {
-      producto = prodData;
-      _inputFieldDateController.text = producto.fechaCaducidad;
-    }
+    _inputFieldDateController.text = producto.fechaCaducidad;
+    loginBloc.listarUsuarioCorreo(producto.idCorreo);
 
     return Scaffold(
       key: scaffoldKey,
@@ -79,12 +75,6 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
     );
   }
 
-  /*void obtenerDatos() {
-    loginBloc.listarUsuario();
-    Stream<UsuarioModel> data = loginBloc.usuarioStream;
-    data.listen((data) => usuario = data);
-  }*/
-
   Widget _mostrarNombre() {
     return TextFormField(
       readOnly: true,
@@ -109,7 +99,7 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
 
   Widget _crearNombreDonador() {
     return StreamBuilder(
-        stream: loginBloc.usuarioStream,
+        stream: loginBloc.usuario2Stream,
         builder: (BuildContext context, AsyncSnapshot<UsuarioModel> snapshot) {
           if (snapshot.hasData) {
             return TextFormField(
@@ -212,7 +202,7 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
     setState(() {
       _guardando = true;
     });
-    print(producto.toJson());
+    //print(producto.toJson());
     mensajesBloc.apartarProducto(usuario, producto);
     producto.idCorreoRepartidor.add(pref.correo);
     loginBloc.agregarInteresado(producto.id, usuario.correo, usuario.nombres,

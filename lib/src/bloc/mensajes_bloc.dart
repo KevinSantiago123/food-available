@@ -22,10 +22,10 @@ class MensajesBloc {
     _cargandoController.sink.add(false);
   }
 
-  void confirmarDonacion(
-      InteresadoModel interesado, ProductoModel producto) async {
+  void confirmarDonacion(InteresadoModel interesado, ProductoModel producto,
+      UsuarioModel usuario) async {
     _cargandoController.sink.add(true);
-    await _pushProvider.sendMessageConfirmacion(interesado, producto);
+    await _pushProvider.sendMessageConfirmacion(interesado, producto, usuario);
     _cargandoController.sink.add(false);
   }
 

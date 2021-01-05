@@ -27,8 +27,8 @@ class _MapaPageState extends State<MapaPage> {
     mensajesBloc = Provider.mensajesBloc(context);
     dataMap = ModalRoute.of(context).settings.arguments;
     loginBloc.listarUsuario();
-    Stream<UsuarioModel> dataUsuario = loginBloc.usuarioStream;
-    dataUsuario.listen((data) => usuario = data);
+    Stream<UsuarioModel> dataUsu = loginBloc.usuarioStream;
+    dataUsu.listen((dataU) => usuario = dataU);
     return Scaffold(
       appBar: AppBar(
         title: Text('Ubica la donación'),

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:food_available/src/pages/interesados_page.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:food_available/src/models/usuario_model.dart';
@@ -10,6 +9,7 @@ class LoginBloc with Validators {
   final _emailController = new BehaviorSubject<String>();
   final _passwordController = new BehaviorSubject<String>();
   final _usuarioController = new BehaviorSubject<UsuarioModel>();
+  final _usuario2Controller = new BehaviorSubject<UsuarioModel>();
   final _cargandoUserController = new BehaviorSubject<bool>();
   final _interesadosController = new BehaviorSubject<List<InteresadoModel>>();
   final _usuarioProvider = new UsuarioProvider();
@@ -20,6 +20,7 @@ class LoginBloc with Validators {
       _passwordController.stream.transform(validarPassword);
 
   Stream<UsuarioModel> get usuarioStream => _usuarioController.stream;
+  Stream<UsuarioModel> get usuario2Stream => _usuario2Controller.stream;
   Stream<bool> get cargando => _cargandoUserController.stream;
 
   Stream<bool> get stateBotonStream =>
@@ -37,6 +38,11 @@ class LoginBloc with Validators {
   void listarUsuario() async {
     final usuario = await _usuarioProvider.buscarInfoUsuario();
     _usuarioController.sink.add(usuario);
+  }
+
+  void listarUsuarioCorreo(String correo) async {
+    final usuarioC = await _usuarioProvider.buscarInfoUsuarioCorreo(correo);
+    _usuario2Controller.sink.add(usuarioC);
   }
 
   void agregarUsuario(UsuarioModel usuario) async {
@@ -62,6 +68,7 @@ class LoginBloc with Validators {
     _emailController?.close();
     _passwordController?.close();
     _usuarioController?.close();
+    _usuario2Controller?.close();
     _cargandoUserController?.close();
     _interesadosController?.close();
   }

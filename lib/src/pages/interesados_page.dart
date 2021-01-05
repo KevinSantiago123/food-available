@@ -14,6 +14,7 @@ class InteresadosPage extends StatefulWidget {
 class _InteresadosPageState extends State<InteresadosPage> {
   ProductoModel producto;
   LoginBloc loginBloc;
+  UsuarioModel usuario;
   ProductosBloc productosBloc;
   MensajesBloc mensajesBloc;
   Map dataMap;
@@ -24,8 +25,11 @@ class _InteresadosPageState extends State<InteresadosPage> {
     productosBloc = Provider.productosBloc(context);
     loginBloc = Provider.of(context);
     mensajesBloc = Provider.mensajesBloc(context);
+    loginBloc.listarUsuario();
     loginBloc.listarInteresados(dataMap['id_producto']);
     productosBloc.listarProducto(dataMap['id_producto']);
+    Stream<UsuarioModel> dataUsu = loginBloc.usuarioStream;
+    dataUsu.listen((datU) => usuario = datU);
     Stream<ProductoModel> dataPro = productosBloc.productoStream;
     dataPro.listen((data) => producto = data);
 
@@ -111,7 +115,7 @@ class _InteresadosPageState extends State<InteresadosPage> {
     print(producto.toJson());
     print(interesado.toJson());
     productosBloc.editarProducto(producto);
-    mensajesBloc.confirmarDonacion(interesado, producto);
+    mensajesBloc.confirmarDonacion(interesado, producto, usuario);
     Navigator.pushReplacementNamed(context, 'opciones');
   }
 }

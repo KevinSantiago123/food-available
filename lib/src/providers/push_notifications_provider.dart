@@ -81,7 +81,7 @@ class PushNotificationsProvider {
       const IosNotificationSettings(
           sound: true, badge: true, alert: true, provisional: false),
     );
-    print(producto.tokenCel);
+    //print(producto.tokenCel);
     final _url = 'https://fcm.googleapis.com/fcm/send';
     final _header = {
       'Content-Type': 'application/json',
@@ -102,9 +102,9 @@ class PushNotificationsProvider {
       },
       'to': producto.tokenCel,
     };
-    print(_url);
-    print(_header);
-    print(jsonEncode(_body));
+    //print(_url);
+    //print(_header);
+    //print(jsonEncode(_body));
 
     final resp =
         await http.post(_url, headers: _header, body: jsonEncode(_body));
@@ -113,7 +113,9 @@ class PushNotificationsProvider {
   }
 
   Future<Map<String, dynamic>> sendMessageConfirmacion(
-      InteresadoModel interesado, ProductoModel producto) async {
+      InteresadoModel interesado,
+      ProductoModel producto,
+      UsuarioModel usuario) async {
     await _firebaseMessaging.requestNotificationPermissions(
       const IosNotificationSettings(
           sound: true, badge: true, alert: true, provisional: false),
@@ -126,7 +128,7 @@ class PushNotificationsProvider {
     };
     final _body = {
       'notification': <String, dynamic>{
-        'title': '${interesado.nombres}',
+        'title': '${usuario.nombres}',
         'body': 'Aceptó tu solicitud de donación.'
       },
       'priority': 'high',

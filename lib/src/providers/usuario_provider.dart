@@ -100,6 +100,17 @@ class UsuarioProvider {
     return usuario;
   }
 
+  Future<UsuarioModel> buscarInfoUsuarioCorreo(String correo) async {
+    final url =
+        '$_url/usuarios.json?orderBy="correo"&equalTo="$correo"&print=pretty&auth=${_pref.token}';
+    //print(url);
+    final resp = await http.get(url);
+    final UsuarioModel usuario =
+        _usuario.modelarUsuario(json.decode(resp.body));
+    //print(usuario.toJson());
+    return usuario;
+  }
+
   Future<List<InteresadoModel>> listarInteresados(String idProducto) async {
     final url =
         '$_url/interesados.json?orderBy="id_producto"&equalTo="$idProducto"&print=pretty&auth=${_pref.token}';
