@@ -302,7 +302,7 @@ class _RegistroPageState extends State<RegistroPage> {
                   color: Colors.deepPurple[300],
                 ),
                 labelText: 'Contraseña',
-                counterText: snapshot.data,
+                //counterText: snapshot.data,
                 errorText: snapshot.error),
             onChanged: bloc.changePassword,
           ),

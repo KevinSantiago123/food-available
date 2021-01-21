@@ -138,7 +138,10 @@ class RepartidorPage extends StatelessWidget {
                 } else if (decision == 2) {
                   Map data = {
                     'nombre': producto.nombre,
-                    'token_cel': producto.tokenCel
+                    'token_cel': producto.tokenCel,
+                    'correo': producto.idCorreo,
+                    'cx': producto.cx,
+                    'cy': producto.cy
                   };
                   Navigator.pushNamed(context, ruta, arguments: data);
                 }

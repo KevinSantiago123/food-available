@@ -18,9 +18,9 @@ class PushNotificationsProvider {
 
   initNotifications() async {
     await _firebaseMessaging.requestNotificationPermissions();
-    final tokenCel = await _firebaseMessaging.getToken();
-    print('==================FCM Token Init Madre================');
-    print(tokenCel);
+    //final tokenCel = await _firebaseMessaging.getToken();
+    //print('==================FCM Token Init Madre================');
+    //print(tokenCel);
 
     _firebaseMessaging.configure(
       onMessage: onMessage,
@@ -53,23 +53,23 @@ class PushNotificationsProvider {
   }
 
   Future<dynamic> onMessage(Map<String, dynamic> message) async {
-    print('=============onMessage============');
-    print('message: $message');
+    //print('=============onMessage============');
+    //print('message: $message');
     final argumento = message['data'];
     _mensajesStreamController.sink.add(argumento);
     //print(argumento);
   }
 
   Future<dynamic> onLaunch(Map<String, dynamic> message) async {
-    print('===========onLaunch============');
-    print('message: $message');
+    //print('===========onLaunch============');
+    //print('message: $message');
     final argumento = message['data'];
     _mensajesStreamController.sink.add(argumento);
   }
 
   Future<dynamic> onResume(Map<String, dynamic> message) async {
-    print('============onResume=============');
-    print('message: $message');
+    //print('============onResume=============');
+    //print('message: $message');
     final argumento = message['data'];
     _mensajesStreamController.sink.add(argumento);
     //print(argumento);
@@ -99,6 +99,7 @@ class PushNotificationsProvider {
         'status': 'done',
         'id_producto': '${producto.id}',
         'ruta': 'interesados',
+        'nombre_persona': usuario.nombres
       },
       'to': producto.tokenCel,
     };
@@ -138,7 +139,10 @@ class PushNotificationsProvider {
         'status': 'done',
         'ruta': 'mapa',
         'nombre': producto.nombre,
-        'token_cel': producto.tokenCel
+        'token_cel': producto.tokenCel,
+        'correo': producto.idCorreo,
+        'cx': producto.cx,
+        'cy': producto.cy
       },
       'to': interesado.tokenInteresado,
     };
@@ -172,6 +176,8 @@ class PushNotificationsProvider {
         'id': '1',
         'status': 'done',
         'ruta': 'calificaciones',
+        'correo': usuario.correo,
+        'autor': 'repartidor'
       },
       'to': dataMap['token_cel'],
     };

@@ -9,7 +9,7 @@ String productoEntregadoModelToJson(ProductoEntregadoModel data) =>
 class ProductoEntregadoModel {
   String id;
   String idCorreo;
-  String idCorreoRepartidor;
+  List<String> idCorreoRepartidor;
   String nombre;
   double cantidadUnidades;
   String fechaCaducidad;
@@ -23,6 +23,8 @@ class ProductoEntregadoModel {
   double cy;
   String fotoUrl;
   int estado;
+  String tokenCel;
+  String idCorreoRepartidorAsignado;
   String fechaEntrega;
   String direccionEntrega;
   String barrioEntrega;
@@ -41,7 +43,7 @@ class ProductoEntregadoModel {
     this.cantidadUnidades = 0.0,
     this.fechaCaducidad,
     this.direccion,
-    this.telefono = 0,
+    this.telefono,
     this.barrio,
     this.ciudad,
     this.departamento,
@@ -49,7 +51,9 @@ class ProductoEntregadoModel {
     this.cx = 0.0,
     this.cy = 0.0,
     this.fotoUrl,
-    this.estado = 0,
+    this.estado,
+    this.tokenCel,
+    this.idCorreoRepartidorAsignado,
     this.fechaEntrega,
     this.direccionEntrega,
     this.barrioEntrega,
@@ -65,7 +69,7 @@ class ProductoEntregadoModel {
       ProductoEntregadoModel(
         id: json["id"],
         idCorreo: json["id_correo"],
-        idCorreoRepartidor: json["id_correo_repartidor"],
+        idCorreoRepartidor: json["id_correo_repartidor"].cast<String>(),
         nombre: json["nombre"],
         cantidadUnidades: json["cantidad_unidades"].toDouble(),
         fechaCaducidad: json["fecha_caducidad"],
@@ -79,6 +83,8 @@ class ProductoEntregadoModel {
         cy: json["cy"].toDouble(),
         fotoUrl: json["foto_url"],
         estado: json["estado"],
+        tokenCel: json["token_cel"],
+        idCorreoRepartidorAsignado: json["id_correo_repartidor_asignado"],
         fechaEntrega: json["fecha_entrega"],
         direccionEntrega: json["direccion_entrega"],
         barrioEntrega: json["barrio_entrega"],
@@ -106,6 +112,8 @@ class ProductoEntregadoModel {
         "cy": cy,
         "foto_url": fotoUrl,
         "estado": estado,
+        "token_cel": tokenCel,
+        "id_correo_repartidor_asignado": idCorreoRepartidorAsignado,
         "fecha_entrega": fechaEntrega,
         "direccion_entrega": direccionEntrega,
         "barrio_entrega": barrioEntrega,
@@ -117,7 +125,7 @@ class ProductoEntregadoModel {
         "cy_entrega": cyEntrega,
       };
 
-  factory ProductoEntregadoModel.fromNull() => ProductoEntregadoModel(
+  /*factory ProductoEntregadoModel.fromNull() => ProductoEntregadoModel(
         id: '1',
         idCorreo: '',
         idCorreoRepartidor: '',
@@ -143,7 +151,7 @@ class ProductoEntregadoModel {
         fotoUrlEntrega: '',
         cxEntrega: 0.0,
         cyEntrega: 0.0,
-      );
+      );*/
 
   ProductoEntregadoModel toProductoModel(ProductoEntregadoModel producto) =>
       ProductoEntregadoModel(
@@ -163,6 +171,8 @@ class ProductoEntregadoModel {
         cy: producto.cy,
         fotoUrl: producto.fotoUrl,
         estado: producto.estado,
+        tokenCel: producto.tokenCel,
+        idCorreoRepartidorAsignado: producto.idCorreoRepartidorAsignado,
         fechaEntrega: '',
         direccionEntrega: '',
         barrioEntrega: '',
@@ -176,25 +186,6 @@ class ProductoEntregadoModel {
 
   List<ProductoEntregadoModel> modelarProductosEntregado(data) {
     final List<ProductoEntregadoModel> productosEntregado = new List();
-    //print('pase');
-    if (data == null) {
-      //print('pase null');
-      data.forEach((id, prod) {
-        final _temp = ProductoEntregadoModel.fromNull();
-        productosEntregado.add(_temp);
-      });
-      return productosEntregado;
-    }
-
-    if (data['error'] != null) {
-      //print('pase error');
-      data.forEach((id, prod) {
-        final _temp = ProductoEntregadoModel.fromNull();
-        productosEntregado.add(_temp);
-      });
-      return productosEntregado;
-    }
-    //print('pase2');
     data.forEach((id, prod) {
       final prodTemp = ProductoEntregadoModel.fromJson(prod);
       prodTemp.id = id;

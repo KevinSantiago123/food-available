@@ -20,6 +20,8 @@ class _MapaPageState extends State<MapaPage> {
   final MapController map = new MapController();
   final double zoom = 16;
   String tipoMapa = 'streets-v11';
+  double cx;
+  double cy;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,14 @@ class _MapaPageState extends State<MapaPage> {
     loginBloc.listarUsuario();
     Stream<UsuarioModel> dataUsu = loginBloc.usuarioStream;
     dataUsu.listen((dataU) => usuario = dataU);
+    Map dataMap2 = {'correo': dataMap['correo'], 'autor': 'donador'};
+    if (dataMap.containsKey('status')) {
+      cx = double.parse(dataMap['cx']);
+      cy = double.parse(dataMap['cy']);
+    } else {
+      cx = dataMap['cx'];
+      cy = dataMap['cy'];
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Ubica la donación'),
@@ -43,12 +53,12 @@ class _MapaPageState extends State<MapaPage> {
         }),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.face),
-            onPressed: () => Navigator.pushNamed(context, 'calificaciones'),
-          ),
+              icon: Icon(Icons.face),
+              onPressed: () => Navigator.pushNamed(context, 'calificaciones',
+                  arguments: dataMap2)),
           IconButton(
             icon: Icon(Icons.my_location),
-            onPressed: () => map.move(LatLng(4.758558, -74.032203), zoom),
+            onPressed: () => map.move(LatLng(cy, cx), zoom),
           )
         ],
       ),
@@ -61,7 +71,7 @@ class _MapaPageState extends State<MapaPage> {
   Widget _crearFlutterMap() {
     return FlutterMap(
       mapController: map,
-      options: MapOptions(center: LatLng(4.758558, -74.032203), zoom: zoom),
+      options: MapOptions(center: LatLng(cy, cx), zoom: zoom),
       //
       layers: [
         _crearMapa(),
@@ -86,7 +96,7 @@ class _MapaPageState extends State<MapaPage> {
       Marker(
           width: 100.0,
           height: 100.0,
-          point: LatLng(4.758558, -74.032203),
+          point: LatLng(cy, cx),
           builder: (context) => Container(
                 child: Icon(Icons.location_on,
                     size: 60.0, color: Theme.of(context).primaryColor),

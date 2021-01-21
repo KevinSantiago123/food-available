@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:food_available/src/bloc/provider.dart';
 import 'package:food_available/src/models/producto_model.dart';
+import 'package:food_available/src/utils/util.dart';
 
 class DonadorPage extends StatelessWidget {
   @override
@@ -24,7 +25,8 @@ class DonadorPage extends StatelessWidget {
       builder:
           (BuildContext context, AsyncSnapshot<List<ProductoModel>> snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data.length == 0) return Container();
+          if (snapshot.data.length == 0)
+            return ver('aun no has realizado donaciones');
           //Navigator.pushReplacementNamed(context, 'login');
           return ListView.builder(
             padding: EdgeInsets.all(10.0),

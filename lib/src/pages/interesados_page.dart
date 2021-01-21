@@ -112,8 +112,8 @@ class _InteresadosPageState extends State<InteresadosPage> {
     producto.id = interesado.idProducto;
     producto.estado = 2;
     producto.idCorreoRepartidorAsignado = interesado.correo;
-    print(producto.toJson());
-    print(interesado.toJson());
+    //print(producto.toJson());
+    //print(interesado.toJson());
     productosBloc.editarProducto(producto);
     mensajesBloc.confirmarDonacion(interesado, producto, usuario);
     Navigator.pushReplacementNamed(context, 'opciones');

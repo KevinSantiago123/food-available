@@ -33,7 +33,7 @@ void mostrarSnackbar(String mensaje, dynamic key) {
 
 Widget ver(String mensaje) {
   return Container(
-    padding: EdgeInsets.symmetric(horizontal: 30.0),
+    padding: EdgeInsets.all(50),
     child: Column(children: [
       Icon(
         Icons.error_outline,
@@ -41,8 +41,13 @@ Widget ver(String mensaje) {
         size: 60,
       ),
       Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: Text(mensaje),
+        padding: const EdgeInsets.only(top: 16, left: 20),
+        child: Text(
+          mensaje,
+          style: TextStyle(
+              wordSpacing: 2, fontSize: 18, fontStyle: FontStyle.italic),
+          textAlign: TextAlign.center,
+        ),
       )
     ]),
   );

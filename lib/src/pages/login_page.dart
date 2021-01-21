@@ -33,7 +33,8 @@ class LoginPage extends StatelessWidget {
       padding: EdgeInsets.only(top: 80.0),
       child: Column(
         children: <Widget>[
-          Icon(Icons.food_bank, color: Colors.white, size: 100.0),
+          //Icon(Icons.food_bank, color: Colors.white, size: 100.0),
+          Image.asset('assets/launcher2.png'),
           SizedBox(
             height: 10.0,
             width: double.infinity,
@@ -170,7 +171,7 @@ class LoginPage extends StatelessWidget {
                   color: Colors.deepPurple[300],
                 ),
                 labelText: 'Contraseña',
-                counterText: snapshot.data,
+                //counterText: snapshot.data,
                 errorText: snapshot.error),
             onChanged: bloc.changePassword,
           ),

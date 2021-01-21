@@ -5,6 +5,12 @@ ProductoModel productoModelFromJson(String str) =>
 
 String productoModelToJson(ProductoModel data) => json.encode(data.toJson());
 
+CoordenadasModel coordenadasModelFromJson(String str) =>
+    CoordenadasModel.fromJson(json.decode(str));
+
+String coordenadasModelToJson(CoordenadasModel data) =>
+    json.encode(data.toJson());
+
 class ProductoModel {
   String id;
   String idCorreo;
@@ -125,4 +131,25 @@ class ProductoModel {
     });
     return usuTemp;
   }
+}
+
+class CoordenadasModel {
+  double cx;
+  double cy;
+
+  CoordenadasModel({
+    this.cx,
+    this.cy,
+  });
+
+  factory CoordenadasModel.fromJson(Map<String, dynamic> json) =>
+      CoordenadasModel(
+        cx: json["lng"].toDouble(),
+        cy: json["lat"].toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "cx": cx,
+        "cy": cy,
+      };
 }

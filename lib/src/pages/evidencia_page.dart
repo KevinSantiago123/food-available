@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:food_available/src/models/producto_entregado_model.dart';
 import 'package:food_available/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:food_available/src/bloc/provider.dart';
+import 'package:food_available/src/models/producto_model.dart';
 
 class EvidenciaPage extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class _EvidenciaPageState extends State<EvidenciaPage> {
   ProductosBloc productosBloc;
   PreferenciasUsuario pref;
   ProductoEntregadoModel productoEntregado = new ProductoEntregadoModel();
+  CoordenadasModel coordenadas = new CoordenadasModel();
   bool _guardando = false;
   String _fecha = '';
   TextEditingController _inputFieldDateController = new TextEditingController();
@@ -27,7 +29,7 @@ class _EvidenciaPageState extends State<EvidenciaPage> {
   Widget build(BuildContext context) {
     if (contador == 0) {
       productosBloc = Provider.productosBloc(context);
-      productosBloc.cargarEvidenciaProducto(3);
+      productosBloc.cargarEvidenciaProducto(2);
       pref = new PreferenciasUsuario();
       Stream<ProductoEntregadoModel> data =
           productosBloc.productoEntregadoStream;
@@ -224,8 +226,14 @@ class _EvidenciaPageState extends State<EvidenciaPage> {
     setState(() {
       _guardando = true;
     });
-
-    productoEntregado.estado = 4;
+    coordenadas = await productosBloc.obtenerCoordenadas2(
+        productoEntregado.direccionEntrega,
+        productoEntregado.barrioEntrega,
+        productoEntregado.ciudadEntrega,
+        productoEntregado.departamentoEntrega);
+    productoEntregado.estado = 3;
+    productoEntregado.cxEntrega = coordenadas.cx;
+    productoEntregado.cyEntrega = coordenadas.cy;
 
     if (foto != null) {
       productoEntregado.fotoUrlEntrega = await productosBloc.subirFoto(foto);
@@ -242,7 +250,7 @@ class _EvidenciaPageState extends State<EvidenciaPage> {
   void mostrarSnackbar(String mensaje) {
     final snackbar = SnackBar(
       content: Text(mensaje),
-      duration: Duration(milliseconds: 2000),
+      duration: Duration(milliseconds: 1500),
     );
     scaffoldKey.currentState.showSnackBar(snackbar);
   }

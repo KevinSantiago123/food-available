@@ -13,10 +13,11 @@ class OpcionesPage extends StatelessWidget {
             children: <Widget>[
               SizedBox(height: 40.0),
               _titulos(),
+              Image.asset('assets/launcher2.png'),
               SizedBox(height: 50.0),
               _botonesRedondiados(context),
               SizedBox(height: 10.0),
-              _textoSalir(context),
+              _botonSalir(context),
             ],
           ),
         )
@@ -81,14 +82,14 @@ class OpcionesPage extends StatelessWidget {
                   fontSize: 30.0,
                   fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10.0),
+            /*SizedBox(height: 10.0),
             Text(
               'Selecciona alguna opción',
               style: TextStyle(
                 color: Colors.purple[800],
                 fontSize: 18.0,
               ),
-            ),
+            ),*/
           ],
         ),
       ),
@@ -174,5 +175,20 @@ class OpcionesPage extends StatelessWidget {
         Navigator.pushReplacementNamed(context, 'login');
       },
     );
+  }
+
+  Widget _botonSalir(BuildContext context) {
+    return RaisedButton(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 4.0),
+          child: Text(
+            'Cerrar Sesión',
+            style: TextStyle(fontSize: 15.0),
+          ),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+        color: Colors.indigo[300],
+        textColor: Colors.white,
+        onPressed: () => Navigator.pushReplacementNamed(context, 'login'));
   }
 }

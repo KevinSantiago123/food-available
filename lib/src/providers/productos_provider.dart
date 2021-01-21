@@ -34,6 +34,19 @@ class ProductosProvider {
   final productosModel = new ProductoModel();
   final productosEntregadoModel = new ProductoEntregadoModel();
 
+  Future<CoordenadasModel> geolocalizar(
+      String dir, String bar, String ciu, String dep) async {
+    var temp;
+    final url =
+        'https://maps.googleapis.com/maps/api/geocode/json?address=$dir, $bar, $ciu, $dep, colombia&key=AIzaSyAmkxnOho34pIYMSqblQvWma_qPPl_UjAY';
+    final resp = await http.get(url);
+    temp = json.decode(resp.body);
+    final CoordenadasModel coordenadas =
+        CoordenadasModel.fromJson(temp['results'][0]['geometry']['location']);
+    //print('saliendo del ws' + producto.toJson().toString());
+    return coordenadas;
+  }
+
   Future<bool> crearProducto(ProductoModel producto) async {
     final url = '$_url/productos.json?auth=${_pref.token}';
     final resp = await http.post(url, body: productoModelToJson(producto));
@@ -77,6 +90,23 @@ class ProductosProvider {
     return productos;
   }
 
+  Future<List<ProductoEntregadoModel>> listarProductosEntregados(
+      [int opcion = 1]) async {
+    String url;
+    if (opcion == 1) {
+      url =
+          '$_url/productos_entregados.json?orderBy="id_correo"&equalTo="${_pref.correo}"&print=pretty&auth=${_pref.token}';
+    } else {
+      url =
+          '$_url/productos_entregados.json?orderBy="id_correo_repartidor_asignado"&equalTo="${_pref.correo}"&print=pretty&auth=${_pref.token}';
+    }
+    //print(url);
+    final resp = await http.get(url);
+    final List<ProductoEntregadoModel> productos = productosEntregadoModel
+        .modelarProductosEntregado(json.decode(resp.body));
+    return productos;
+  }
+
   Future<List<ProductoModel>> listarProductosRecolector([int value = 1]) async {
     final url =
         '$_url/productos.json?orderBy="estado"&equalTo=$value&print=pretty&auth=${_pref.token}';
@@ -99,7 +129,7 @@ class ProductosProvider {
             .modelarProductosEntregado(json.decode(resp.body));
     ProductoEntregadoModel productosNew = new ProductoEntregadoModel();
     productosEntregados.forEach((data) {
-      if (data.idCorreoRepartidor == _pref.correo) {
+      if (data.idCorreoRepartidorAsignado == _pref.correo) {
         productosNew = productosNew.toProductoModel(data);
       }
     });

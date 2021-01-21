@@ -17,14 +17,15 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   ProductosBloc productosBloc;
   MensajesBloc mensajesBloc;
+  CoordenadasModel coordenadas = new CoordenadasModel();
   PreferenciasUsuario pref;
   ProductoModel producto = new ProductoModel();
-
   bool _guardando = false;
   String _fecha = '';
   TextEditingController _inputFieldDateController = new TextEditingController();
   File foto;
   String tokenCel;
+  Map dataMap2;
 
   @override
   Widget build(BuildContext context) {
@@ -37,36 +38,31 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
       _inputFieldDateController.text = producto.fechaCaducidad;
     } else {
       mensajesBloc.generarTokenCel();
+      productosBloc.obtenerCoordenadas(producto.direccion, producto.barrio,
+          producto.ciudad, producto.departamento);
       Stream<String> data = mensajesBloc.tokenCelStream;
+      Stream<CoordenadasModel> data2 = productosBloc.coordenadasStream;
       data.listen((data) => tokenCel = data);
+      data2.listen((pegar) => coordenadas = pegar);
     }
     Map<String, dynamic> dataMap = {'id_producto': producto.id};
+    if (producto.idCorreoRepartidorAsignado != null) {
+      dataMap2 = {
+        'correo': producto.idCorreoRepartidorAsignado,
+        'autor': 'repartidor'
+      };
+    } else {
+      dataMap2 = {
+        'correo': producto.idCorreoRepartidorAsignado,
+        'autor': 'repartidor'
+      };
+    }
     //print('soy el token cel: ' + tokenCel.toString());
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
         title: Text('Producto'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.assignment_outlined),
-            onPressed: () =>
-                Navigator.pushNamed(context, 'interesados', arguments: dataMap),
-          ),
-          IconButton(
-            icon: Icon(Icons.face),
-            onPressed: () => Navigator.pushNamed(context, 'calificaciones'),
-          ),
-          IconButton(
-            icon: Icon(Icons.photo_size_select_actual),
-            onPressed: _seleccionarFoto,
-            //onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.camera_alt),
-            onPressed: _tomarFoto,
-            //onPressed: () {},
-          )
-        ],
+        actions: barra(prodData, dataMap),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -94,6 +90,46 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
         ),
       ),
     );
+  }
+
+  List<Widget> barra(ProductoModel prodData, Map<String, dynamic> dataMap) {
+    if (prodData != null) {
+      return [
+        IconButton(
+          icon: Icon(Icons.assignment_outlined),
+          onPressed: () =>
+              Navigator.pushNamed(context, 'interesados', arguments: dataMap),
+        ),
+        IconButton(
+          icon: Icon(Icons.face),
+          onPressed: () => Navigator.pushNamed(context, 'calificaciones',
+              arguments: dataMap2),
+        ),
+        IconButton(
+          icon: Icon(Icons.photo_size_select_actual),
+          onPressed: _seleccionarFoto,
+          //onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(Icons.camera_alt),
+          onPressed: _tomarFoto,
+          //onPressed: () {},
+        )
+      ];
+    } else {
+      return [
+        IconButton(
+          icon: Icon(Icons.photo_size_select_actual),
+          onPressed: _seleccionarFoto,
+          //onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(Icons.camera_alt),
+          onPressed: _tomarFoto,
+          //onPressed: () {},
+        )
+      ];
+    }
   }
 
   Widget _crearNombre() {
@@ -319,6 +355,8 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
 
     if (producto.id == null) {
       producto.tokenCel = tokenCel;
+      producto.cx = coordenadas.cx.toDouble();
+      producto.cy = coordenadas.cy.toDouble();
       productosBloc.agregarProducto(producto);
     } else {
       productosBloc.editarProducto(producto);
