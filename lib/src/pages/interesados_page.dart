@@ -35,7 +35,7 @@ class _InteresadosPageState extends State<InteresadosPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Interesados page'),
+        title: Text('Lista de Interesados'),
       ),
       body: _crearListadoInteresados(),
     );

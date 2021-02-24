@@ -214,7 +214,7 @@ class LoginPage extends StatelessWidget {
         Text('Aun no tienes cuenta,'),
         TextButton(
           child: Text(
-            'registrate aquí',
+            'regístrate aquí',
             style: TextStyle(
               color: Colors.deepPurple[300],
               fontWeight: FontWeight.bold,

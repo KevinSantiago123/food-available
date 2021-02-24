@@ -7,7 +7,7 @@ class AcercaPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Acerca de'),
+        title: Text('Objetivo de la App'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -24,7 +24,7 @@ class AcercaPage extends StatelessWidget {
   Widget _crearImagen() {
     return Container(
       width: double.infinity,
-      child: Image.asset('assets/fao.jpg'),
+      child: Image.asset('assets/fao2.jpg'),
       /*Image(
         image: Image.asset('assets/fao.jpg');
         height: 200.0,

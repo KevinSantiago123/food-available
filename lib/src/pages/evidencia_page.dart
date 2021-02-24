@@ -214,7 +214,7 @@ class _EvidenciaPageState extends State<EvidenciaPage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       color: Colors.green[600],
       textColor: Colors.white,
-      label: Text('Cargar Evidencia.'),
+      label: Text('Cargar Evidencia'),
       icon: Icon(Icons.cloud),
       onPressed: (_guardando) ? null : _submit,
     );

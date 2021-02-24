@@ -111,10 +111,10 @@ class OpcionesPage extends StatelessWidget {
           children: [
             _crearBotonRedondeado(context, Colors.green, Icons.access_time,
                 'Mi Historial', 'historial'),
-            _crearBotonRedondeado(context, Colors.orange,
-                Icons.insert_drive_file, 'Acerca de', 'acerca'),
+            _crearBotonRedondeado(
+                context, Colors.orange, Icons.person, 'Mi Perfil', 'perfil'),
           ],
-        )
+        ),
       ],
     );
   }
@@ -151,6 +151,7 @@ class OpcionesPage extends StatelessWidget {
           Text(
             texto,
             style: TextStyle(color: color, fontSize: 18.0),
+            textAlign: TextAlign.center,
           ),
           SizedBox(
             height: 5.0,

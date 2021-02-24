@@ -61,6 +61,8 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
                 _mostrarFecha(context),
                 _crearNombreDonador(),
                 _mostrarTelefono(),
+                _mostrarDireccion(),
+                _mostrarBarrio(),
                 _mostrarCiudad(),
                 _mostrarDepartamento(),
                 _mostrarObservacion(),
@@ -141,15 +143,34 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
     );
   }
 
-  Widget _crearBarrio() {
-    return TextFormField(
-      readOnly: true,
-      initialValue: producto.barrio,
-      decoration: InputDecoration(
-        labelText: 'Barrio',
-        icon: Icon(Icons.confirmation_num, color: Colors.deepPurple[700]),
-      ),
-    );
+  Widget _mostrarDireccion() {
+    if (producto.id == '1') {
+      return TextFormField(
+        readOnly: true,
+        initialValue: producto.direccion,
+        decoration: InputDecoration(
+          labelText: 'Direccion',
+          icon: Icon(Icons.add_location, color: Colors.deepPurple[700]),
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget _mostrarBarrio() {
+    if (producto.id == '1') {
+      return TextFormField(
+        readOnly: true,
+        initialValue: producto.barrio,
+        decoration: InputDecoration(
+          labelText: 'Barrio',
+          icon: Icon(Icons.confirmation_num, color: Colors.deepPurple[700]),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 
   Widget _mostrarCiudad() {
@@ -186,14 +207,20 @@ class _ProductoRepartidorPageState extends State<ProductoRepartidorPage> {
   }
 
   Widget _crearBoton() {
-    return RaisedButton.icon(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-      color: Colors.green[600],
-      textColor: Colors.white,
-      label: Text('Apartar Producto'),
-      icon: Icon(Icons.send),
-      onPressed: (_guardando) ? null : _submit,
-    );
+    print(producto.id);
+    if (producto.id == '1') {
+      return Container();
+    } else {
+      return RaisedButton.icon(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+        color: Colors.green[600],
+        textColor: Colors.white,
+        label: Text('Apartar Producto'),
+        icon: Icon(Icons.send),
+        onPressed: (_guardando) ? null : _submit,
+      );
+    }
   }
 
   void _submit() async {

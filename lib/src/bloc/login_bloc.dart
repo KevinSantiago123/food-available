@@ -64,6 +64,12 @@ class LoginBloc with Validators {
     _interesadosController.sink.add(interesados);
   }
 
+  void actualizarUsuario(UsuarioModel usuario) async {
+    _cargandoUserController.sink.add(true);
+    await _usuarioProvider.editarUsuario(usuario);
+    _cargandoUserController.sink.add(false);
+  }
+
   dispose() {
     _emailController?.close();
     _passwordController?.close();

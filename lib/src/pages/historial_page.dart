@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'package:food_available/src/bloc/provider.dart';
-import 'package:food_available/src/models/producto_entregado_model.dart';
-import 'package:food_available/src/models/producto_model.dart';
 import 'package:food_available/src/utils/util.dart';
 
 class HistorialPage extends StatefulWidget {
@@ -55,7 +53,7 @@ class _HistorialPageState extends State<HistorialPage> {
     _seriesPieData = List<charts.Series<Task, String>>();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff1976d2),
+        //backgroundColor: Color,
         title: Text('Mi Historial'),
       ),
       body: FutureBuilder(

@@ -124,7 +124,7 @@ class _RegistroPageState extends State<RegistroPage> {
                   SizedBox(height: 10.0),
                   _textoPassword(bloc),
                   SizedBox(height: 30.0),
-                  _crearBoton(bloc, 'Registrate'),
+                  _crearBoton(bloc, 'Regístrate'),
                 ],
               ),
             ),
@@ -354,7 +354,7 @@ class _RegistroPageState extends State<RegistroPage> {
         Text('¿Ya tienes cuenta?'),
         TextButton(
           child: Text(
-            'Login',
+            'Inicio sesión',
             style: TextStyle(
               color: Colors.deepPurple[300],
               fontWeight: FontWeight.bold,

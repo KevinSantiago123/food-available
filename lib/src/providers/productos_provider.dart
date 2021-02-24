@@ -43,7 +43,7 @@ class ProductosProvider {
     temp = json.decode(resp.body);
     final CoordenadasModel coordenadas =
         CoordenadasModel.fromJson(temp['results'][0]['geometry']['location']);
-    //print('saliendo del ws' + producto.toJson().toString());
+    print('saliendo del ws' + coordenadas.toJson().toString());
     return coordenadas;
   }
 

@@ -142,7 +142,8 @@ class PushNotificationsProvider {
         'token_cel': producto.tokenCel,
         'correo': producto.idCorreo,
         'cx': producto.cx,
-        'cy': producto.cy
+        'cy': producto.cy,
+        'id_producto': producto.id
       },
       'to': interesado.tokenInteresado,
     };

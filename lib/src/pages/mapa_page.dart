@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_available/src/models/producto_model.dart';
 import 'package:latlong/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 
@@ -15,7 +16,9 @@ class MapaPage extends StatefulWidget {
 class _MapaPageState extends State<MapaPage> {
   MensajesBloc mensajesBloc;
   LoginBloc loginBloc;
+  ProductosBloc productosBloc;
   UsuarioModel usuario;
+  ProductoModel producto;
   Map dataMap;
   final MapController map = new MapController();
   final double zoom = 16;
@@ -27,10 +30,17 @@ class _MapaPageState extends State<MapaPage> {
   Widget build(BuildContext context) {
     loginBloc = Provider.of(context);
     mensajesBloc = Provider.mensajesBloc(context);
+    productosBloc = Provider.productosBloc(context);
     dataMap = ModalRoute.of(context).settings.arguments;
+    productosBloc.listarProducto(dataMap['id_producto']);
     loginBloc.listarUsuario();
+    Stream<ProductoModel> prod = productosBloc.productoStream;
     Stream<UsuarioModel> dataUsu = loginBloc.usuarioStream;
     dataUsu.listen((dataU) => usuario = dataU);
+    prod.listen((data1) {
+      producto = data1;
+      producto.id = '1';
+    });
     Map dataMap2 = {'correo': dataMap['correo'], 'autor': 'donador'};
     if (dataMap.containsKey('status')) {
       cx = double.parse(dataMap['cx']);
@@ -42,7 +52,7 @@ class _MapaPageState extends State<MapaPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Ubica la donación'),
-        leading: Builder(builder: (BuildContext context) {
+        /*leading: Builder(builder: (BuildContext context) {
           return IconButton(
             icon: const Icon(Icons.menu),
             onPressed: () {
@@ -50,8 +60,13 @@ class _MapaPageState extends State<MapaPage> {
             },
             tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
           );
-        }),
+        }),*/
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.info),
+            onPressed: () => Navigator.pushNamed(context, 'producto_repartidor',
+                arguments: producto),
+          ),
           IconButton(
               icon: Icon(Icons.face),
               onPressed: () => Navigator.pushNamed(context, 'calificaciones',
@@ -59,7 +74,7 @@ class _MapaPageState extends State<MapaPage> {
           IconButton(
             icon: Icon(Icons.my_location),
             onPressed: () => map.move(LatLng(cy, cx), zoom),
-          )
+          ),
         ],
       ),
       body: _crearFlutterMap(),

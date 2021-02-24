@@ -121,4 +121,12 @@ class UsuarioProvider {
         _interesado.modelarInteresados(json.decode(resp.body));
     return interesados;
   }
+
+  Future<bool> editarUsuario(UsuarioModel usuario) async {
+    final url = '$_url/usuarios/${usuario.idUsuario}.json?auth=${_pref.token}';
+    //final resp = producto.remove('id');
+    final resp = await http.put(url, body: usuarioModelToJson(usuario));
+    final decodedData = json.decode(resp.body);
+    return true;
+  }
 }

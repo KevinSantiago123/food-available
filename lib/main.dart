@@ -8,6 +8,7 @@ import 'package:food_available/src/pages/evidencia_page.dart';
 import 'package:food_available/src/pages/historial_page.dart';
 import 'package:food_available/src/pages/interesados_page.dart';
 import 'package:food_available/src/pages/mapa_page.dart';
+import 'package:food_available/src/pages/perfil_page.dart';
 import 'package:food_available/src/pages/producto_repartidor_page.dart';
 import 'package:food_available/src/pages/repartidor_page.dart';
 import 'package:food_available/src/pages/donador_page.dart';
@@ -87,6 +88,7 @@ class _MyAppState extends State<MyApp> {
           'evidencia': (BuildContext context) => EvidenciaPage(),
           'historial': (BuildContext context) => HistorialPage(),
           'acerca': (BuildContext context) => AcercaPage(),
+          'perfil': (BuildContext context) => PerfilPage(),
         },
         theme: ThemeData(primaryColor: Colors.deepPurple),
       ),

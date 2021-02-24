@@ -41,6 +41,7 @@ class UsuarioModel {
       );
 
   Map<String, dynamic> toJson() => {
+        //"id": idUsuario,
         "tipo_documento": tipoDocumento,
         "numero_documento": numeroDocumento,
         "nombres": nombres,
@@ -54,6 +55,7 @@ class UsuarioModel {
     UsuarioModel usuTemp;
     data.forEach((id, prod) {
       usuTemp = UsuarioModel.fromJson(prod);
+      usuTemp.idUsuario = id;
     });
     return usuTemp;
   }

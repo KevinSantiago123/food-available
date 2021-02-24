@@ -37,13 +37,15 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
       producto = prodData;
       _inputFieldDateController.text = producto.fechaCaducidad;
     } else {
+      if (producto.departamento != null) {
+        productosBloc.obtenerCoordenadas(producto.direccion, producto.barrio,
+            producto.ciudad, producto.departamento);
+        Stream<CoordenadasModel> data2 = productosBloc.coordenadasStream;
+        data2.listen((pegar) => coordenadas = pegar);
+      }
       mensajesBloc.generarTokenCel();
-      productosBloc.obtenerCoordenadas(producto.direccion, producto.barrio,
-          producto.ciudad, producto.departamento);
       Stream<String> data = mensajesBloc.tokenCelStream;
-      Stream<CoordenadasModel> data2 = productosBloc.coordenadasStream;
       data.listen((data) => tokenCel = data);
-      data2.listen((pegar) => coordenadas = pegar);
     }
     Map<String, dynamic> dataMap = {'id_producto': producto.id};
     if (producto.idCorreoRepartidorAsignado != null) {
@@ -196,7 +198,7 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
       initialValue: producto.telefono.toString(),
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        labelText: 'Telefono',
+        labelText: 'Teléfono',
         icon: Icon(Icons.smartphone, color: Colors.deepPurple[700]),
       ),
       onSaved: (value) => producto.telefono = int.parse(value),
@@ -219,8 +221,8 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
       //cursorColor: Colors.red,
       decoration: InputDecoration(
         //border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
-        hintText: 'Fecha de caducidad',
-        labelText: 'Fecha de caducidad',
+        hintText: 'Fecha de Caducidad',
+        labelText: 'Fecha de Caducidad',
         suffixIcon:
             Icon(Icons.perm_contact_calendar, color: Colors.deepPurple[700]),
         icon: Icon(Icons.calendar_today, color: Colors.deepPurple[700]),

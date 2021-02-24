@@ -141,7 +141,8 @@ class RepartidorPage extends StatelessWidget {
                     'token_cel': producto.tokenCel,
                     'correo': producto.idCorreo,
                     'cx': producto.cx,
-                    'cy': producto.cy
+                    'cy': producto.cy,
+                    'id_producto': producto.id
                   };
                   Navigator.pushNamed(context, ruta, arguments: data);
                 }
