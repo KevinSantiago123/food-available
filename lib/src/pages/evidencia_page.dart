@@ -243,7 +243,7 @@ class _EvidenciaPageState extends State<EvidenciaPage> {
     setState(() {
       _guardando = false;
     });
-    mostrarSnackbar('Se cargo la evidencia exitosamente Exitosamente');
+    //mostrarSnackbar('Se cargo la evidencia exitosamente Exitosamente');
     Navigator.pushReplacementNamed(context, 'opciones');
   }
 

@@ -366,7 +366,7 @@ class _ProductoDonadorPageState extends State<ProductoDonadorPage> {
     setState(() {
       _guardando = false;
     });
-    utils.mostrarSnackbar('Registro guardado', scaffoldKey);
+    //utils.mostrarSnackbar('Registro guardado', scaffoldKey);
     Navigator.pushReplacementNamed(context, 'opciones');
   }
 
